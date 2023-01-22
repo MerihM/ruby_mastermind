@@ -53,14 +53,12 @@ module  Mastermind
             end
             @@position_check_arr = @@position_check_arr.sort
         end
-        public 
         def playOneRound
             4.times{choiceInput}
             compareInputCombination
             winCondition
         end
-        def playGame
-            newCombination
+        def playMultiRonuds
             until @@win || @@round == 10
                 playOneRound
                 @@round += 1
@@ -69,11 +67,14 @@ module  Mastermind
                 @@round_arr.push(tempArr)
                 @@round_arr.each { |arr| p arr }
                 unless @@win
+                    puts 'Press enter to continue'
                     gets.chomp
                     @@position_check_arr = []
                     @@choice_arr = []
                 end
             end
+        end
+        def endMessage
             if @@win
                 puts `clear`
                 puts "Good job, you win"
@@ -81,6 +82,12 @@ module  Mastermind
                 puts `clear`
                 puts 'Better luck next time!!'
             end
+        end
+        public 
+        def playGame
+            newCombination
+            playMultiRonuds
+            endMessage
             @@round_arr.each { |arr| p arr }
             puts "Combination was #{@@combination_arr}"
         end
