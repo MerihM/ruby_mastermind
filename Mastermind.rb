@@ -25,6 +25,9 @@ module  Mastermind
             isItAvailable = @@colors_array.any?{|color| color == tempC.downcase}
             until isItAvailable
                 puts `clear`
+                p "Choices"
+                print @@colors_array
+                p ''
                 p "Wrong choice, select again"
                 tempC = gets.chomp
                 isItAvailable = @@colors_array.any?{|color| color == tempC.downcase}
@@ -40,10 +43,7 @@ module  Mastermind
         end
         def winCondition
             @@win = false
-            if (@@position_check_arr.all?{|mem| mem == 1})
-                @@win = true
-                p 'We have a winner'
-            end
+            @@win = true if (@@position_check_arr.all?{|mem| mem == 1})
         end
         def compareInputCombination
             @@combination_arr.each_with_index do 
@@ -59,27 +59,32 @@ module  Mastermind
             compareInputCombination
             winCondition
         end
-        def testMethod
+        def playGame
             newCombination
-            until @@win
+            until @@win || @@round == 10
                 playOneRound
+                @@round += 1
                 tempArr = []
                 tempArr.push(@@choice_arr).push(@@position_check_arr)
                 @@round_arr.push(tempArr)
-                @@round_arr.each do
-                    |arr|
-                    p arr
-                end
-                p @@position_check_arr
+                @@round_arr.each { |arr| p arr }
                 unless @@win
                     gets.chomp
                     @@position_check_arr = []
                     @@choice_arr = []
                 end
             end
-            puts "Good job, you win"
+            if @@win
+                puts `clear`
+                puts "Good job, you win"
+            else
+                puts `clear`
+                puts 'Better luck next time!!'
+            end
+            @@round_arr.each { |arr| p arr }
+            puts "Combination was #{@@combination_arr}"
         end
     end
 end
 
-Mastermind.testMethod
+Mastermind.playGame
